@@ -2,10 +2,28 @@
 
 class Tweet{
     
-    static public function LoadAllTweetsByUserId(mysqli $conn, $user_id){
+    static public function loadAllTweetsByUserId(mysqli $conn, $user_id){
         $sql = "SELECT * FROM Tweet WHERE user_id = $user_id";
         $result = $conn->query($sql);
         if($result != FALSE && $result->num_rows > 0){
+            $allTweets = array();
+            foreach ($result as $row){
+                $newTweet = new Tweet();
+                $newTweet->id = $row['id'];
+                $newTweet->text = $row['text'];
+                $newTweet->user_id = $row['user_id'];
+                $allTweets[] = $newTweet;
+            }
+            return $allTweets;
+        }
+        
+        return [];
+    }
+    
+    static public function loadAllTweets(mysqli $conn){
+        $sql = "SELECT * FROM Tweet";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0){
             $allTweets = array();
             foreach ($result as $row){
                 $newTweet = new Tweet();
@@ -98,10 +116,10 @@ class Tweet{
     }
     
     public function showTweet(){
-        echo $this->user_id. "said: " .$this->text;
+        echo "User: " .$this->user_id. "  said: " .$this->text. "<br>";
     }
     
     public function getAllComents(mysql $conn){
-        return Comment::GetAllComments($conn, $this->id);
+        return Comment::getAllComments($conn, $this->id);
     }
 }

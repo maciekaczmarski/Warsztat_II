@@ -13,9 +13,28 @@
         
 class Comment{
     
+    static public function getAllComments($conn, $post_id){
+        $sql = "SELECT * FROM Comment WHERE post_id = $post_id";
+        $result = $conn->query($sql);
+        if($result->num_rows > 0){
+            $allComments = array();
+            foreach($result as $row){
+                $newComment = new Comment();
+                $newComment->id = $row['id'];
+                $newComment->userId = $row['user_id'];
+                $newComment->postId = $row['post_id'];
+                $newComment->text = $row['text'];
+                $newComment->creationDate = $row['creation_date'];
+                $allComments [] = $newComment;
+            }
+            return $allComments;
+        }
+        return [];
+    }
+    
     private $id;
-    private $user_id;
-    private $post_id;
+    private $userId;
+    private $postId;
     private $creationDate;
     private $text;
 
@@ -26,28 +45,28 @@ class Comment{
 
 
     public function setUserId ($newUserId){
-        $this->user_id = is_interger($newUserId) ? $newUserId : '' ;
+        $this->userId = is_integer($newUserId) ? $newUserId : -1 ;
     }
     
     public function getUserId(){
-        return $this->user_id;
+        return $this->userId;
     }
     
     public function setPostId($newPostId){
-        $this->post_id = is_inerger($newPostId) ? $newPostId : '';
+        $this->postId = is_integer($newPostId) ? $newPostId : -1;
     }
     
     public function getPostId(){
-        return $this->post_id;
+        return $this->postId;
     }
     
-    public function setCreateionDate($newCreationDate){
-        $this->creation_date = $newCreationDate ? $newCreationDate : '';
+    public function setCreationDate($newCreationDate){
+        $this->creationDate = $newCreationDate ? $newCreationDate : '';
         
     }
     
     public function getCreationDate(){
-        return $this->creation_date;
+        return $this->creationDate;
     }
     
     public function setText($newText){
@@ -60,72 +79,60 @@ class Comment{
     
     public function __construct() {
         $this->id = -1;
-        $this->user_id = '';
-        $this->post_id = '';
+        $this->userId = '';
+        $this->postId = '';
         $this->creationDate = '';
         $this->text = '';
     }
     
     public function loadFromDB (mysqli $conn, $id){
-            $sql = "SELECT * FROM Comment WHERE id = $id";
-            $result = $conn->query($sql);
-            if($result->num_rows > 0){
-                $row = $result->fetch_assoc();
-                $this->id = $row['id'];
-                $this->user_id = $row['user_id'];
-                $this->post_id = $row['post_id'];
-                $this->text = $row['text'];
-                $this->creationDate = $row['creation_date'];
-                return true;
-            }
-            return false;
+        $sql = "SELECT * FROM Comment WHERE id = $id";
+        $result = $conn->query($sql);
+        if($result->num_rows > 0){
+            $row = $result->fetch_assoc();
+            $this->id = $row['id'];
+            $this->userId = $row['user_id'];
+            $this->postId = $row['post_id'];
+            $this->text = $row['text'];
+            $this->creationDate = $row['creation_date'];
+            return true;
+        }
+        return false;
     }
             
     public function createComment (mysqli $conn){
         if($this->id == -1){
             $sql = "INSERT INTO Comment (user_id, post_id, text, creation_date)
-            VALUES ('$this->user_id', '$this->post_id', '$this->text', '$this->creationDate')";
+            VALUES ('$this->userId', '$this->postId', '$this->text', '$this->creationDate')";
+            
             if ($conn->query($sql)){
                 $this->id = $conn->insert_id;
                 return true;
             }
-            return false;
         }
+        return false;
     }
     
     public function updateComment (mysqli $conn){
-        $sql = "UPDATE Comment SET
-        user_id = '$this->user_id',
-        post_id = '$this->post_id',
-        creation_date = '$this->creationDate',
-        text = '$this->text'";
-        if($conn->query($sql)){
-            return TRUE;
+        if($this->id != -1){
+            $sql = "UPDATE Comment SET
+            user_id = '$this->userId',
+            post_id = '$this->postId',
+            creation_date = '$this->creationDate',
+            text = '$this->text'";
+            if($conn->query($sql)){
+                return TRUE;
+        }
         }
         return FALSE;
     }
     
     public function showComment(){
-        echo $this->user_id."commented: ".$this->text.' '."creation_date"; 
+        echo "User: " .$this->userId. " commented: " .$this->text. "<br>"; 
+        echo "<span style='color:grey'>" .$this->creationDate. "</span><br>";
     }
     
-    static public function GetAllComments($conn, $post_id){
-        $sql = "SELECT * FROM Comment WHERE post_id = $post_id";
-        $result = $conn->query($sql);
-        if($result->num_rows > 0){
-            $allComments = array();
-            foreach($result as $row){
-                $newComment = new Comment();
-                $newComment->$row['id'];
-                $newComment->$row['user_id'];
-                $newComment->$row['text'];
-                $newComment->$row['creation_date'];
-                $allComments [] = $newComment;
-            }
-            return $allComments;
-        }
-        return [];
-    }
+
 }
 
 

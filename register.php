@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             </label><br>
             <label>
                 Password confirmation:<br>
-                <input type='text' name='pswConfirmation'/>
+                <input type='password' name='pswConfirmation'/>
             </label><br>
             <label>
                 Full name:<br>

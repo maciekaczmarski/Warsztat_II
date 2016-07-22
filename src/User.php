@@ -23,8 +23,8 @@ class User{
         $result = $conn->query($sql);
         if ($result->num_rows == 1){
             $row = $result->fetch_assoc();
-            $user = new User();//jezeli znalezlismy uzytkownika chcemy okreslic mu atrybuty
-            $user->setId($row['id']);
+            $user = new User();
+            $user->setId((int)$row['id']);
             $user->setEmail($row['email']);
             $user->setPassword($row['psw']);
             $user->setFullName($row['fullName']);
@@ -35,6 +35,45 @@ class User{
             return false;
         }
     }
+    
+    static public function getUserById (mysqli $conn, $id){
+        $sql = "SELECT * FROM User WHERE id = $id";
+        $result = $conn->query($sql);
+        if ($result->num_rows == 1){
+            $row = $result->fetch_assoc();
+            $user = new User();
+            $user->setId((int)$row['id']);
+            $user->setEmail($row['email']);
+            $user->setPassword($row['psw']);
+            $user->setFullName($row['fullName']);
+            $user->setActive($row['active']);
+            return $user;
+        }
+        else{
+            return false;
+        }
+    }
+    
+    static public function loadAllUsers (mysqli $conn){
+        $sql ="SELECT * FROM User";
+        $result = $conn->query($sql);
+        if($result->num_rows > 0){
+            $allUsers = array();
+            foreach ($result as $row){
+                $newUser = new User();
+                $newUser->id = (int)$row['id'];
+                $newUser->email = $row['email'];
+                $newUser->fullName = $row['fullName'];
+                $allUsers[] =  $newUser;
+            }
+            return $allUsers;
+        }
+        else{
+            return [];
+        }
+    }
+    
+    
 
 
     protected $id;
@@ -79,6 +118,10 @@ class User{
         $this->active = $active == 0 || $active == 1 ? $active : 0;
     }
     
+    public function getId(){
+        return $this->id;
+    }
+    
     public function saveToDB(mysqli $conn){
         if($this->id == -1 ){
             $sql = "INSERT INTO User (email, psw, fullName, active)
@@ -112,14 +155,25 @@ class User{
     }
     
     public function loadAllTweets(mysqli $conn){
-        return Tweet::LoadAllTweetsByUserId($conn, $this->user_id);//czy tu na pewno user_id
+        return Tweet::loadAllTweetsByUserId($conn, $this->id);
     }
     
-    public function LoadMsgForSender(mysqli $conn){
-        return Message::LoadAllMsgForSender($conn, $this->user_id);
+    public function loadSentMessages(mysqli $conn){
+        return Message::loadSentMessages($conn, $this->id);
     }
     
-    public function LoadMsgForReceiver(mysqli $conn){
-        return Message::LoadAllMsgForReceiver($conn, $this->user_id);
+    public function loadRecivedMessages(mysqli $conn){
+        return Message::loadRecivedMessages($conn, $this->id);
+    }
+    
+    public function showUserInfo(){
+      echo  "ID: " .$this->id. "<br>".
+            "emiail adress: " .$this->email. "<br>".
+            "Full name: " .$this->fullName. "<br>".
+            "Active: " .$this->active;
+    }
+    
+    public function showUser(){
+        echo "ID: " .$this->id.  " email adress: " .$this->email;
     }
 }
