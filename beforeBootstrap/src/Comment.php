@@ -128,8 +128,8 @@ class Comment{
     }
     
     public function showComment(){
-        echo "<span style='color:blue;'><strong>@$this->userId </strong></span><span style='color:grey;'> commented:</span><span style='color:black;'> $this->text </span><br> 
-        <span style='color:grey;'> $this->creationDate </span><br>";
+        echo "User: " .$this->userId. " commented: " .$this->text. "<br>"; 
+        echo "<span style='color:grey'>" .$this->creationDate. "</span><br>";
     }
     
 

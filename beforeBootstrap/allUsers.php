@@ -1,4 +1,3 @@
-
 <a href='index.php'> << Main site </a><br><br>
 
 <?php

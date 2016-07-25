@@ -174,22 +174,6 @@ class User{
     }
     
     public function showUser(){
-        
-        //echo "ID: " .$this->id.  " email adress: " .$this->email;
-        echo" <table class='table table-condensed'>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Email adress</th>
-
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>$this->id</td>
-        <td>$this->email</td>
-      </tr>
-    </tbody>
-  </table>";
+        echo "ID: " .$this->id.  " email adress: " .$this->email;
     }
 }

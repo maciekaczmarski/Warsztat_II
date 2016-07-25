@@ -116,12 +116,10 @@ class Tweet{
     }
     
     public function showTweet(){
-        //echo "User " .$this->user_id. "  said: " .$this->text. "<br>";
-        echo "<span style='color:blue;'><strong> @$this->user_id </strong></span><span style='color:grey;'> said:</span><span style='color:black;'>$this->text</span><br>";
+        echo "User: " .$this->user_id. "  said: " .$this->text. "<br>";
     }
     
     public function getAllComents(mysql $conn){
         return Comment::getAllComments($conn, $this->id);
     }
 }
-

@@ -148,24 +148,19 @@ class Message {
     
     public function showReceivedMessage(){
         if ($this->seen == 0){
-        echo "<strong>You received message from user: " .$this->senderId. "<br><em><span style='color:black;'>" .substr($this->text, 0, 30). "...</span></em><br></strong>";
+        echo "<strong>You received message from user: " .$this->senderId. "<br> Content: " .substr($this->text, 0, 30). "<br></strong>";
         }
         else {
-        echo "You received message from user: " .$this->senderId. "<br><em><span style='color:grey;'>" .substr($this->text, 0, 30). "...</span></em><br>";    
+        echo "You received message from user: " .$this->senderId. "<br> Content: " .substr($this->text, 0, 30). "<br>";    
         }
     }
     
     public function showSentMessage(){
-        //echo "You sent message to: " .$this->receiverId. "<br> Content:" .substr($this->text, 0, 30). "<br>";
-        echo "You sent message to: " .$this->receiverId. "<br><em><span style='color:grey;'>" .substr($this->text, 0, 30). "...</span></em><br>";
+        echo "You sent message to: " .$this->receiverId. "<br> Content:" .substr($this->text, 0, 30). "<br>";
     }
     
     public function showMessage(){
-        echo "<div class = 'container'>
-                <div class = 'well'>
-                    <strong>Message:</strong><br>" .$this->text; 
-                echo "</div>";
-            "</div>";
+        echo "Content: <br>" .$this->text;
     }
 }
 
